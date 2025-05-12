@@ -36,8 +36,8 @@ def load_dialogue_data(folder_path):
         except Exception as e:
             print(f"错误：读取{file_path}时发生意外错误 - {str(e)}")
     all_data = []
-    prompt = '你是泰康之家的客服管家，泰康之家是泰康人寿的养老社区，你需要耐心、热情、语气温和、富有共情能力，需要考虑共情能力,需要根据老人的特征进行回复。'
-    feature = '客户老人的特征如下：\n{}'
+    prompt = '你是北清大学之家的心理咨询师，北清大学是世界一流的大学，你需要耐心、热情、语气温和、富有共情能力，需要考虑共情能力,需要根据老人的特征进行回复。'
+    feature = '同学的特征如下：\n{}'
     for d in all_dialogues:
         if 'system' in d:
             all_data.append({'messages':[{'role':'system','content':prompt+feature.format(d['system']['feature'])}]+d['messages']})
