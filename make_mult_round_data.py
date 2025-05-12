@@ -2,14 +2,24 @@
 """
 大学生对话数据生成系统 - 修改版
 """
+import json
+import random
+import threading
+from concurrent.futures import ThreadPoolExecutor
+from openai import OpenAI 
+import os
 
 # 初始化OpenAI客户端
 client = OpenAI(
-    api_key="******",
-    base_url="*****",
+    api_key="e09185f7-aad4-485a-8a66-66562e53c250",
+    base_url="https://ark.cn-beijing.volces.com/api/v3",
 )
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
-
+# 使用相对路径加载 trait_db.json
+trait_db_path = os.path.join(current_dir, 'trait_db.json')
+with open(trait_db_path, 'r', encoding='utf-8') as f:
+    trait_db = json.load(f)
 
 # 全局变量和锁
 lock = threading.Lock()
@@ -81,18 +91,25 @@ def worker(task_args):
     return generate_dialog(topic_dict, rounds, length_range, examples)
 
 if __name__ == "__main__":
+  # 获取当前脚本所在目录
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+
     # 加载真实样例数据
-    with open(r'D:\Mycode\data\create_long\data_example.json', 'r', encoding='utf-8') as f:
+    data_example_path = os.path.join(current_dir, 'example_data.json')
+    with open(data_example_path, 'r', encoding='utf-8') as f:
         style_examples = json.load(f)
-    #加载真实主题数据
-    with open(r'D:\Mycode\data\create_long\主题.json', 'r', encoding='utf-8') as f:
+
+    # 加载真实主题数据
+    topic_path = os.path.join(current_dir, 'theme.json')
+    with open(topic_path, 'r', encoding='utf-8') as f:
         sample_topics = json.load(f)
-    types = list(sample_topics[0].keys())
+
+    types = list(sample_topics.keys())
 
     # 准备任务列表
     tasks = []
-    for _ in range(10000):
-        sample_topic = random.choice(sample_topics[0][random.choice(types)])
+    for _ in range(2000):
+        sample_topic = random.choice(sample_topics[random.choice(types)])
         example = random.choice(style_examples)['messages']
         tasks.append((sample_topic, [3, 20], [60, 100], example))
 
@@ -111,6 +128,8 @@ if __name__ == "__main__":
                 print(f"任务异常: {str(e)}")
 
     # 最终保存
-    with open(r'D:\Mycode\xiaotai_data\create_long\dialogue_data.json', 'w', encoding='utf-8') as f:
+    output_path = os.path.join(current_dir, 'dialogue_data.json')
+    with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(dialogs, f, ensure_ascii=False, indent=4)
     print(f'任务完成，共生成{len(dialogs)}条有效数据')
+    print(f'数据已保存到 {output_path}')
