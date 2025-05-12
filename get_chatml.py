@@ -63,7 +63,7 @@ if __name__ == "__main__":
         print(json.dumps(dialog, indent=2, ensure_ascii=False))
 
     # 保存结果到当前目录下的 doubao_data.json
-    output_path = os.path.join(current_dir, 'doubao_data.json')
+    output_path = os.path.join(current_dir, 'style_chatbot.json')
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(dialogues, f, ensure_ascii=False, indent=4)
 
