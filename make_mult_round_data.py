@@ -11,7 +11,7 @@ import os
 
 # 初始化OpenAI客户端
 client = OpenAI(
-    api_key="e09185f7-aad4-485a-8a66-66562e53c250",
+    api_key="***",
     base_url="https://ark.cn-beijing.volces.com/api/v3",
 )
 current_dir = os.path.dirname(os.path.abspath(__file__))
